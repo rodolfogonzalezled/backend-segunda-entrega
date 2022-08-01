@@ -1,0 +1,22 @@
+[
+  {
+    "id": 2,
+    "timestamp": "31/7/2022 18:54:29",
+    "nombre": "Rodolfo Jose",
+    "precio": "5000",
+    "foto": "https://culturageek.com.ar/wp-content/uploads/2022/07/3999947-mj1.jpeg",
+    "descripcion": "gdgdg",
+    "codigo": "ZNVTW18097",
+    "stock": "34"
+  },
+  {
+    "id": 3,
+    "timestamp": "31/7/2022 23:01:20",
+    "nombre": "nba 2k23",
+    "precio": "6777",
+    "foto": "https://image.api.playstation.com/pr/bam-art/143/366/028c90f5-63d9-4611-bc55-798076c208ea.jpg?w=620&thumb=false",
+    "descripcion": "Juego de deportes",
+    "codigo": "ZNVTW18097",
+    "stock": "3"
+  }
+]

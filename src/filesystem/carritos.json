@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "timestamp": "31/7/2022 19:14:47",
+    "productos": [
+      {
+        "id": 1,
+        "timestamp": "31/7/2022 17:43:18",
+        "nombre": "fdddgg",
+        "precio": "545454",
+        "foto": "https://image.api.playstation.com/vulcan/ap/rnd/202106/3002/Eaq9uyUlyLZK8L5xTlsPl0rM.png",
+        "descripcion": "Jueg",
+        "codigo": "4545",
+        "stock": "554545",
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "timestamp": "31/7/2022 19:15:56",
+    "productos": []
+  },
+  {
+    "id": 3,
+    "timestamp": "31/7/2022 19:21:57",
+    "productos": []
+  },
+  {
+    "id": 4,
+    "timestamp": "31/7/2022 20:18:24"
+  }
+]
