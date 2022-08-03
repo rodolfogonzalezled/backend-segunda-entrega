@@ -7,34 +7,29 @@ btnBorrarCarrito.addEventListener('click', () => {
 
 function agregarAlCarrito(id) {
     let idCarrito = window.localStorage.getItem('idCarrito');
-    obtenerProductoPorId(id)
-        .then(producto => {
-            if (producto) {
-                console.log(producto)
-                if (idCarrito) {
-                    fetch(`/api/carrito/${idCarrito}/productos`, {
-                        method: 'POST',
-                        body: JSON.stringify(producto),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .catch(error => console.error('Error:', error));
-                } else {
-                    fetch(`/api/carrito`, {
-                        method: 'POST',
-                        body: JSON.stringify({ producto }),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(result => result.json())
-                        .then(result => window.localStorage.setItem('idCarrito', result.id))
-                        .catch(error => console.error('Error:', error));
-                }
+
+    if (idCarrito) {
+        fetch(`/api/carrito/${idCarrito}/productos`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id }),
+            headers: {
+                'Content-Type': 'application/json'
             }
         })
         .catch(error => console.error('Error:', error));
+    } else {
+        fetch(`/api/carrito`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(result => result.json())
+        .then(result => window.localStorage.setItem('idCarrito', result.id ? result.id : result._id))
+        .catch(error => console.error('Error:', error));
+    }
+
 }
 
 function obtenerProductos() {
@@ -82,9 +77,8 @@ function borrarCarrito() {
         .catch(error => console.error('Error:', error));
 }
 
-socket.on("carritos", (productos) => {
-    pintarCarrito(productos);
-
+socket.on("carritos", (carritos) => {
+    pintarCarrito(carritos.productos);
 });
 
 function pintarCarrito(productos) {
@@ -97,8 +91,8 @@ function pintarCarrito(productos) {
     }
     contenedorProductosCarrito.innerHTML = '';
     productos.map((producto) => {
-
         let divContenedor = document.createElement("li");
+        let id = producto.id ? producto.id : producto._id;
         divContenedor.classList.add("list-group-item");
         divContenedor.innerHTML = `
             <div class="row" style="text-align: center">
@@ -114,15 +108,15 @@ function pintarCarrito(productos) {
                     <div class="col py-4"><b>Cantidad:</b> ${producto.cantidad}</div>
                 </div>
                 <div class="col text-center">
-                    <a><i id="btnBorrarPorId${producto.id}" class="bi bi-trash btn btn-danger"></i></a>
+                    <a><i id="btnBorrarPorId${id}" class="bi bi-trash btn btn-danger"></i></a>
                 </div>
             </div>
             `;
         contenedorProductosCarrito.appendChild(divContenedor);
 
-        let btnBorrarPorId = document.getElementById(`btnBorrarPorId${producto.id}`);
+        let btnBorrarPorId = document.getElementById(`btnBorrarPorId${id}`);
         btnBorrarPorId.addEventListener('click', () => {
-            borrarProductoCarrito(producto.id)
+            borrarProductoCarrito(id)
         });
     })
 }

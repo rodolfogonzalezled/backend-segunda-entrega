@@ -103,6 +103,7 @@ socket.on("productos", (productos) => {
     productos.map((producto) => {
         let divContenedor = document.createElement("div");
         divContenedor.classList.add("col-md-6", "col-lg-4");
+        let id = producto.id ? producto.id : producto._id;
         divContenedor.innerHTML = `
             <div class="card products">
                 <img class="products__img" src=${producto.foto} alt=${producto.nombre}>
@@ -115,9 +116,9 @@ socket.on("productos", (productos) => {
                         <p><b>Stock:</b> ${producto.stock}</p>
                     </div>
                     <div class="d-flex justify-content-between col-11 mx-auto">
-                        <a><i id="btnAgregarCarrito${producto.id}" class="bi bi-cart-plus btn btn-secondary"></i></a>
-                        <a><i id="btnBorrarProducto${producto.id}" class="bi bi-trash btn btn-secondary"></i></a>
-                        <a href="#agregar"><i id="btnModificarProducto${producto.id}" class="bi bi-pencil btn btn-secondary"></i></a>
+                        <a><i id="btnAgregarCarrito${id}" class="bi bi-cart-plus btn btn-secondary"></i></a>
+                        <a><i id="btnBorrarProducto${id}" class="bi bi-trash btn btn-secondary"></i></a>
+                        <a href="#agregar"><i id="btnModificarProducto${id}" class="bi bi-pencil btn btn-secondary"></i></a>
                     </div>
                 </div>
             </div>
@@ -125,19 +126,19 @@ socket.on("productos", (productos) => {
 
         contenedorProductos.appendChild(divContenedor);
 
-        let btnAgregarCarrito = document.getElementById(`btnAgregarCarrito${producto.id}`);
+        let btnAgregarCarrito = document.getElementById(`btnAgregarCarrito${id}`);
         btnAgregarCarrito.addEventListener('click', () => {
-            agregarAlCarrito(producto.id)
+            agregarAlCarrito(id)
         });
 
-        let btnBorrarProducto = document.getElementById(`btnBorrarProducto${producto.id}`);
+        let btnBorrarProducto = document.getElementById(`btnBorrarProducto${id}`);
         btnBorrarProducto.addEventListener('click', () => {
-            borrarProducto(producto.id)
+            borrarProducto(id)
         });
 
-        let btnModificarProducto = document.getElementById(`btnModificarProducto${producto.id}`);
+        let btnModificarProducto = document.getElementById(`btnModificarProducto${id}`);
         btnModificarProducto.addEventListener('click', () => {
-            modificarProducto(producto.id)
+            modificarProducto(id)
         });
     });
 });

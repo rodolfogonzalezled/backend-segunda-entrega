@@ -37,14 +37,6 @@ export default class ClientDB {
         }
     };
 
-    async updateStock(stock, id) {
-        try {
-            return await this.knex.from(this.nameTable).where('id', id).update({ stock: stock });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     async updateById(id, elemento) {
         try {
             return await this.knex.from(this.nameTable).where('id', id).update({

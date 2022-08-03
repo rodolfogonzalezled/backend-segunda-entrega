@@ -1,30 +1,48 @@
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
-
-
-const products = [
-    {
-        id: 1,
-        timestamp: "30/07/2022",
-        nombre: "NBA 2k23",
-        descripcion: "juego de baloncesto",
-        codigo: "0089",
-        foto: "https://image.api.playstation.com/vulcan/ap/rnd/202106/3002/Eaq9uyUlyLZK8L5xTlsPl0rM.png",
-        precio: 5000,
-        stock: 50
+export default class MongoContainer {
+    constructor(model) {
+        this.model = model;
     }
-];
 
-const productSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true },
-    nombre: { type: String, required: true },
-    descripcion: { type: String, required: true },
-    codigo: { type: String, required: true },
-    foto: { type: String, required: true },
-    precio: { type: Number, required: true },
-    stock: { type: Number, required: true },
-    timestamp: { type: Date, default: Date.now },
-});
+    async add(object) {
+        try {
+            let elementCreated = await this.model.create(object);
+            return elementCreated._id;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    async getAll() {
+        try {
+            return await this.model.find({});
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-const productsDAO = mongoose.model('productos', productSchema);
+    async getById(id) {
+        try {
+            let element = await this.model.findOne({ _id: id }, { __v: 0 });
+            return element.toObject();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async updateById(id, objectToUpdate) {
+        try {
+            return await this.model.updateOne({ _id: id }, { $set: objectToUpdate });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async deleteById(id) {
+        try {
+            return await this.model.deleteOne({ _id: id });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}

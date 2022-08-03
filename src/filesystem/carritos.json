@@ -28,6 +28,19 @@
   },
   {
     "id": 4,
-    "timestamp": "31/7/2022 20:18:24"
+    "timestamp": "31/7/2022 20:18:24",
+    "productos": [
+      {
+        "id": 3,
+        "timestamp": "31/7/2022 23:01:20",
+        "nombre": "nba 2k23",
+        "precio": "6777",
+        "foto": "https://image.api.playstation.com/pr/bam-art/143/366/028c90f5-63d9-4611-bc55-798076c208ea.jpg?w=620&thumb=false",
+        "descripcion": "Juego de deportes",
+        "codigo": "ZNVTW18097",
+        "stock": "3",
+        "cantidad": 1
+      }
+    ]
   }
 ]

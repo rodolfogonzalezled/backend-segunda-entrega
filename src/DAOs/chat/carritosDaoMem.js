@@ -1,6 +1,6 @@
 import MemoryContainer from "../../contenedores/ContenedorMemoria.js";
 
-export default class CartsMemoryDao extends MemoryContainer {
+export default class ChatsMemoryDao extends MemoryContainer {
 
     constructor() {
         super();
