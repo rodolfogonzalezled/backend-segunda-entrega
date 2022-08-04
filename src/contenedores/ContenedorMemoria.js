@@ -23,8 +23,6 @@ export default class MemoryContainer {
     }
 
     updateById(id, object) {
-        console.log(id);
-        console.log(object);
         const objectIndex = this.elements.findIndex((e) => e.id == id);
         if (objectIndex === -1) return { error: "Elemento no encontrado" };
         this.elements[objectIndex] = { ...this.elements[objectIndex], ...object };

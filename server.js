@@ -2,40 +2,8 @@ import express from 'express';
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { isAdmin } from './src/middlewares/isAdmin.js';
-
-//---------------------- MEMORY ---- --------------------------
-// import ProductsMemoryDao from './src/DAOs/productos/productosDaoMem.js'; // Memory
-// import CartsMemoryDao from './src/DAOs/carritos/carritosDaoMem.js';      // Memory
-// import ChatsMemoryDao from './src/DAOs/chat/carritosDaoMem.js';          // Memory
-
-//---------------------- FILE SYSTEM --------------------------
-// import ProductsFileDao from './src/DAOs/productos/productosDaoArchivo.js'; // fileSystem
-// import CartsFileDao from './src/DAOs/carritos/carritosDaoArchivo.js';      // fileSystem
-
-//---------------------- MARIADB Y SQLITE3 ---------------------
-// import { knexMariaDB } from './src/Config/mariaDB.js';
-// import { knexSQLite } from './src/Config/mySqlite3.js';
-// import ClientDB from './src/clientDB.js';
-// import { createTableProducts } from './src/createTableProducts.js';
-// import { createTableChat } from './src/createTableChat.js';
-
-//---------------------- MONGODB ---------------------
-import mongoose from "mongoose";
-import ProductsMongoDBDao from './src/DAOs/productos/productosDaoMongoDb.js'; // MongoDB
-import CartsMongoDBDao from './src/DAOs/carritos/carritosDaoMongoDb.js';      // MongoDB
-import ChatsMongoDBDao from './src/DAOs/chat/chatDaoMongoDb.js';              // MongoDB
-
-const URL = "mongodb://localhost:27017/ecommerce";
-let rta = await mongoose.connect(URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-console.log("DB Connected");
-
-// const NAME_TABLE_PRODUCTS = 'productos';
-// const NAME_TABLE_CHAT = 'mensajes';
-// createTableProducts(knexMariaDB, NAME_TABLE_PRODUCTS);
-// createTableChat(knexSQLite, NAME_TABLE_CHAT);
+import { carts, chat, products } from './src/DAOs/index.js';
+import { config } from './src/Config/config.js';
 
 const app = express()
 const router = express.Router()
@@ -54,26 +22,12 @@ app.set("views", "./public/views");
 app.set("view engine", "ejs");
 
 // --- Conexión del Servidor ------------------------------------------------------------
-const PORT = 9090;
+const PORT = config.port;
 const connectedServer = httpServer.listen(PORT, () => {
     console.log(`Servidor http escuchando en el puerto ${connectedServer.address().port}`)
 });
 connectedServer.on("error", error => console.log(`Error en servidor ${error}`));
 
-// --------------------------------------------------------------------------------------
-// const products = new ProductsMemoryDao();  //Memory
-// const carts = new CartsMemoryDao();        //Memory
-// const chat = new ChatsMemoryDao();         //Memory
-
-// const products = new ProductsFileDao();  // fileSystem
-// const carts = new CartsFileDao();        // fileSystem
-
-// const products = new ClientDB(knexMariaDB, NAME_TABLE_PRODUCTS); //mariaDB
-// const chat = new ClientDB(knexSQLite, NAME_TABLE_CHAT);          // sqlite3
-
-const products = new ProductsMongoDBDao();  //MongoDB
-const carts = new CartsMongoDBDao();        //MongoDB
-const chat = new ChatsMongoDBDao();         //MongoDB
 // --------------------------------------------------------------------------------------
 
 app.get("/", (req, res) => {
@@ -142,8 +96,12 @@ router.delete('/productos/:id', isAdmin, async (req, res) => {
 //------ Api de carritos -----------------------------------------------------------
 
 router.post('/carrito', async (req, res) => {
-    let productos = req.body ?? { productos: [{ ...req.body }] };
-    res.json({ id: await carts.add(productos) });
+    let product;
+    if (req.body.id) {
+        product = await products.getById(req.body.id);
+    }
+    let cart = await carts.add({ productos: [{ ...product, cantidad: 1 }] });
+    res.json({ id: cart });
 })
 
 router.delete('/carrito/:id', async (req, res) => {
@@ -162,12 +120,9 @@ router.post('/carrito/:id/productos', async (req, res) => {
         let product = await products.getById(req.body.id);
         if (product) {
             let productos = cart.productos ? cart.productos : [];
-            let productIndex;
-            if(productos.id) {
-                productIndex = productos.findIndex((e) => e.id == product.id);
-            } else {
-                productIndex = productos.findIndex((e) => e._id.toString() == product._id);
-            }
+
+            let productIndex = productos.findIndex((e) => e.id.toString() == product.id);
+
             if (productIndex != -1) {
                 productos[productIndex] = { ...productos[productIndex], cantidad: productos[productIndex].cantidad + 1 }
             } else {
@@ -183,7 +138,6 @@ router.post('/carrito/:id/productos', async (req, res) => {
 })
 
 router.delete('/carrito/:id/productos/:id_prod', async (req, res) => {
-    
     let cart = await carts.getById(req.params.id);
     if (cart) {
         let productos = cart.productos ? cart.productos : [];

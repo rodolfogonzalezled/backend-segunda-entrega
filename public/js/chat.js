@@ -33,18 +33,17 @@ socket.on("mensajes", (mensajes) => {
     contenedorMensajesHtml.innerHTML = "";
     mensajes.map((mensaje) => {
         let divContenedorChat = document.createElement("li");
-        let id = mensaje._id ? mensaje._id : null;
         divContenedorChat.classList.add("d-flex", "justify-content-between");
         divContenedorChat.innerHTML = `<span class="align-self-center">
         <b style="color: blue;">${mensaje.autor}</b>
         <label style="color: brown;">[${new Date(mensaje.timestamp).toLocaleString()}]</label>:
         <label style="color: green;">${mensaje.mensaje}</label> 
         </span>
-        <a><i id="btnBorrarMensajePorId${id}" class="bi bi-trash btn"></i></a>`
+        <a><i id="btnBorrarMensajePorId${mensaje.id}" class="bi bi-trash btn"></i></a>`
         contenedorMensajesHtml.appendChild(divContenedorChat);
-        let btnBorrarMensajePorId = document.getElementById(`btnBorrarMensajePorId${id}`);
+        let btnBorrarMensajePorId = document.getElementById(`btnBorrarMensajePorId${mensaje.id}`);
         btnBorrarMensajePorId.addEventListener('click', () => {
-            borrarMensajes(id)
+            borrarMensajes(mensaje.id)
         });
     })
     if (mensajes.length == 0) {

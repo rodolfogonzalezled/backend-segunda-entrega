@@ -1,6 +1,6 @@
-export const createTableProducts = async (knex, nameTable) => {
+export const createTableProducts = async (knex) => {
     try {
-        return await knex.schema.createTableIfNotExists(nameTable, table => {
+        return await knex.schema.createTableIfNotExists("productos", table => {
             table.increments('id').primary();
             table.timestamp('timestamp').defaultTo(knex.fn.now()).notNullable();
             table.string('nombre', 100).notNullable();

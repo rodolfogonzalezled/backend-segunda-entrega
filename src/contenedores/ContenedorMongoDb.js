@@ -14,7 +14,10 @@ export default class MongoContainer {
 
     async getAll() {
         try {
-            return await this.model.find({});
+            let elements = await this.model.find({});
+            let result  = elements.map(x=> {return { id: x._id.toString(), ...x.toObject() }});
+
+            return result;
         } catch (error) {
             console.log(error);
         }
@@ -23,7 +26,7 @@ export default class MongoContainer {
     async getById(id) {
         try {
             let element = await this.model.findOne({ _id: id }, { __v: 0 });
-            return element.toObject();
+            return { id: element._id, ...element.toObject()};
 
         } catch (error) {
             console.log(error);

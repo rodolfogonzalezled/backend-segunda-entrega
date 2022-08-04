@@ -29,7 +29,6 @@ function agregarAlCarrito(id) {
         .then(result => window.localStorage.setItem('idCarrito', result.id ? result.id : result._id))
         .catch(error => console.error('Error:', error));
     }
-
 }
 
 function obtenerProductos() {

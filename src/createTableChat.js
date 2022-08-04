@@ -1,6 +1,6 @@
-export const createTableChat = async (knex, nameTable) => {
+export const createTableChat = async (knex) => {
     try {
-        return await knex.schema.createTableIfNotExists(nameTable, table => {
+        return await knex.schema.createTableIfNotExists("mensajes", table => {
             table.increments('id').primary();
             table.string('autor', 50).notNullable();
             table.timestamp('timestamp').defaultTo(knex.fn.now()).notNullable();

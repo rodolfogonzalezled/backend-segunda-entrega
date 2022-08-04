@@ -1,8 +1,9 @@
 import FirebaseContainer from "../../contenedores/ContenedorFirebase.js";
 import { dbFirebase } from "../../DB/firebase/firebase.js";
 
-export default class CartsFirebaseDao extends FirebaseContainer {
+export default class ChatsFirebaseDao extends FirebaseContainer {
+
     constructor() {
-        super(dbFirebase, "carritos");
+        super(dbFirebase, "mensajes");
     }
 }
